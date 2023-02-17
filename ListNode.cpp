@@ -22,6 +22,10 @@ List ListNode::list_from_string(const char *s){
         current->next = new ListNode(s[i], nullptr);
         current = current->next;
     }
+    if (ListNode::net_allocations != 0){
+        list_delete(start_Node);
+        return nullptr;
+    }
     return start_Node;
 }
 
