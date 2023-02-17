@@ -42,7 +42,7 @@ String & String::operator = (String && s){
 
 String & String::operator = (const String & s) {
     if (head != s.head){
-        ListNode::list_delete(s.head);
+        ListNode::list_delete(head);
         head = ListNode::list_copy(s.head);
     }
     return * this;
@@ -73,12 +73,8 @@ int String::indexOf(const char c) const{
 }
 
 int String::indexOf(const String s) const {
-    List current = head;
-    while (current != ListNode::list_str(head, s.head) && current != nullptr) {
-        current = current->next;
-    }
-    if (current == nullptr) return -1;
-    return ListNode::list_difference(head, current);
+    List tmp = ListNode::list_str(head, s.head);
+    return ListNode::list_difference(head, tmp);
 }
 
 bool String::operator == (const String s){
@@ -100,7 +96,7 @@ bool String::operator != (const String s){
 }
 
 bool String::operator > (const String s) {
-    if (ListNode::list_cmp(head, s.head) != 0) {
+    if (ListNode::list_cmp(head, s.head) > 0) {
         return true;
     }
     return false;

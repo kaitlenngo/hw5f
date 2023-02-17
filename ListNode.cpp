@@ -6,12 +6,6 @@ int ListNode::total_allocations = 0;
 int ListNode::net_allocations = 0;
 int ListNode::total_bytes = 0;
 
-//put other ListNode definitions here??
-//oh so
-//all the other declarations from ListNode.h will be defined here
-//dunno how constructor destructor and report_allocations will be uuhhhh
-//idk basically theyre defined in the .h file, not here
-
 List ListNode::list_from_string(const char *s){
     if (s[0] == '\0') return nullptr;
 
@@ -21,10 +15,6 @@ List ListNode::list_from_string(const char *s){
     for (i=1; s[i] != '\0'; i++){
         current->next = new ListNode(s[i], nullptr);
         current = current->next;
-    }
-    if (ListNode::net_allocations != 0){
-        list_delete(start_Node);
-        return nullptr;
     }
     return start_Node;
 }
@@ -88,21 +78,10 @@ List ListNode::list_append(List L1, List L2){
 }
 
 List ListNode::list_str(List haystack, List needle){
-    List current_haystack = haystack;
-    List current_needle = needle;
-    while (current_haystack != nullptr){
-        if (current_haystack->data == current_needle->data){
-            List tmp_haystack = current_haystack;
-            List tmp_needle = current_needle;
-            while (tmp_haystack != nullptr && tmp_needle != nullptr && current_haystack->data == current_needle->data){
-                tmp_haystack = tmp_haystack->next;
-                tmp_needle = tmp_needle->next;
-            }
-            if (tmp_needle == nullptr){
-                return current_haystack;
-            }
-        }
-        current_haystack = current_haystack->next;
+    int needle_len = list_length(needle);
+    for (List tmp = haystack; tmp != nullptr; tmp = tmp->next){
+        if(list_ncmp(tmp, needle, needle_len) == 0)
+            return tmp;
     }
     return nullptr;
 }
@@ -137,11 +116,12 @@ List ListNode::list_nth(List str, int n){
 }
 
 void ListNode::list_delete(List L){
+    if (L == nullptr) return;
     List current = L;
     List tmp;
     while (current != nullptr){
         tmp = current->next;
-        current->~ListNode();
+        delete current;
         current = tmp;
     }
 }
@@ -250,3 +230,11 @@ int ListNode::list_length(List L){
     }
     return count;
 }
+
+// int ListNode::list_length(List L) {
+//     if (L == nullptr) {
+//         return 0;
+//     } else {
+//         return 1 + list_length(L->next);
+//     }
+// }
